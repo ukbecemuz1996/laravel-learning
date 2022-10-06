@@ -1,0 +1,20 @@
+Project Name: Simple Hospital Appointment System
+
+Features:
+- Patient user (Height,Weight,...,)
+- Doctor user
+- Admin user
+- Appointment االشكاية
+- Appointment Type (Surgery,Return)
+- Cancel Appointment
+- Doctors
+- Clinics
+- Clinic Timeline
+- Form For Appointment (Email,Phone)
+- Patient Order Number
+- Sections
+- Clinic Patient Waiting List
+- Reminder
+- If Doctor is not existed all appointments will be canceled
+- Restrict Repeated Appointments
+- Queue Order Management

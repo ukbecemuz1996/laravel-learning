@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,7 +65,7 @@ Route::delete('/users', function () {
 
 // Route::redirect
 
-Route::redirect('/hello','/users',301);
+Route::redirect('/hello', '/users', 301);
 
 // Route::view
 
@@ -78,10 +79,36 @@ Route::redirect('/hello','/users',301);
 
 // Route Parameters
 
+Route::get('/users/{userId}', function ($userId) {
+
+    return "Single User With ID: " . $userId;
+});
+
 // Required Parameters
+
+Route::get('/required-parameter/{id}', function ($id) {
+
+    return "Required Parameter with id: " . $id;
+});
 
 // Optional Parameters
 // should be also optional as arguments
+
+Route::get('/optional-parameter/{id?}', function ($id = null) {
+    if (is_null($id)) {
+        return "Optional Parameter not found";
+    } else {
+        return "Optional Parameter with id: " . $id;
+    }
+});
+
+Route::get('/teachers/{id?}', function ($id = null) {
+    if (is_null($id)) {
+        return "Read All Teachers";
+    } else {
+        return "Single Teacher with id: " . $id;
+    }
+});
 
 // Parameters Constraints
 
@@ -90,7 +117,43 @@ Route::redirect('/hello','/users',301);
 // whereAlpha
 // whereAlphaNumeric
 
+Route::get('/numeric-id/{id}', function ($id) {
+    return "Numeric ID with id: " . $id;
+})->whereNumber('id');
+
+Route::get('/string-id/{id}', function ($id) {
+    return "String ID with id: " . $id;
+})->whereAlpha('id');
+
+Route::get('/posts/{postSlug}', function ($postSlug) {
+    return "Post with slug: " . $postSlug;
+})->whereAlpha('postSlug');
+
+Route::get('/array/{id}', function ($id) {
+    return "Array with id: " . $id;
+})->whereIn('id', ['one', 'two', 'three']);
+
 // Named Routes
+
+Route::post('/managers', function () {
+    return "Create New Manager";
+})->name('manager.create');
+
+Route::get('/managers', function () {
+    return "Read All Managers";
+})->name('manager.read.all');
+
+Route::get('/managers/{id}', function ($id) {
+    return "Read Single Manager With ID: " . $id;
+})->name('manager.read')->whereNumber('id');
+
+Route::put('/managers/{id}', function ($id) {
+    return "Update Manager With ID: " . $id;
+})->name('manager.update');
+
+Route::delete('/managers/{id}', function ($id) {
+    return "Delete Manager With ID: " . $id;
+})->name('manager.delete');
 
 /**
  * Route Groups
@@ -103,9 +166,34 @@ Route::redirect('/hello','/users',301);
 
 // Route Prefixes
 
+Route::prefix('admin')->group(function () {
+    Route::get('/doctors', function () {
+        return "Read All Doctors";
+    });
+    Route::get('/doctors/{id}', function ($id) {
+        return "Read Single Doctor With ID: " . $id;
+    });
+});
+
 // Route Name Prefixes
 
+Route::prefix('test')->group(function () {
+    Route::name('patient.')->group(function () {
+        Route::get('/patients', function () {
+            return "Read All Patients";
+        })->name("read.all"); // patient.read.all
+
+        Route::get('/patients/{id}', function ($id) {
+            return "Read Single Patient With ID: " . $id;
+        })->name("read");
+    });
+});
+
 // Fallback Routes
+
+Route::fallback(function () {
+    return "404 Not Found";
+});
 
 // Route Caching
 // route:cache
@@ -150,6 +238,88 @@ Route::redirect('/hello','/users',301);
  * $request->hasFile()
  */
 
+Route::get('/tmp-request', function (Request $request) {
+
+    // foreach ($request->query() as $key => $value) {
+    //     echo $key . "=>" . $value . "<br>";
+    // }
+
+    // echo $request->query("dewde") . "<br>";
+    // echo "------------ <br>";
+    // foreach ($request->cookie() as $key => $value) {
+    //     echo $key . "=>" . $value . "<br>";
+    // }
+
+    // echo $request->query("gender", "male") . "<br>";
+
+    // echo $request->path() . "<br>";
+    // echo $request->url() . "<br>";
+    // echo $request->fullUrl() . "<br>"; //with query parameters
+    // echo $request->host() . "<br>";
+    // echo $request->getPort() . "<br>";
+    // echo $request->method() . "<br>";
+
+    foreach ($request->header() as $key => $value) {
+        echo $key . "=>" . $value[0] . "<br>";
+    }
+
+    return "Tmp Request";
+});
+
+Route::post('/tmp-request', function (Request $request) {
+
+    foreach ($request->input() as $key => $value) {
+        echo $key . "=>" . $value . "<br>";
+    }
+
+    // echo $request->input("first_name") . "<br>";
+    // echo $request->input("hobby","writing") . "<br>";
+    // echo $request->date("date") . "<br>";
+    // var_dump($request->date("date"));
+    // var_dump($request->boolean("married"));
+
+    // foreach ($request->only(['first_name', 'last_name']) as $key => $value) {
+    //     echo $key . "=>" . $value . "<br>";
+    // }
+
+    // foreach ($request->except(['first_name']) as $key => $value) {
+    //     echo $key . "=>" . $value . "<br>";
+    // }
+
+    // if ($request->has(['first_name','last_name'])) {
+    //     echo $request->input('first_name') . "<br>";
+    // }
+
+    // $request->whenHas('first_name', function ($value) {
+    //     echo $value . " Found <br>";
+    // }, function () {
+    //     echo "first_name not Found <br>";
+    // });
+
+    // if ($request->hasAny(['first_name', 'dewdw'])) {
+    //     echo "Found <br>";
+    // }
+
+    // if ($request->filled('not_filled')) {
+    //     echo "Filled <br>";
+    // }
+
+    // echo "------------ <br>";
+    // foreach ($request->cookie() as $key => $value) {
+    //     echo $key . "=>" . $value . "<br>";
+    // }
+
+    // echo $request->cookie('laravel_session'). "<br>";
+
+    // var_dump($request->file('id_card'));
+    // if ($request->hasFile('id_card')) {
+    //     echo "Found <br>";
+    // }
+
+    echo "<br>";
+    return "Tmp Post Request";
+});
+
 /**
  * ---------- Response ------------
  *  response()
@@ -174,3 +344,29 @@ Route::redirect('/hello','/users',301);
  * php artisan view:cache
  * php artisan view:clear
  */
+
+// class Test
+// {
+
+//     public function get()
+//     {
+//         echo "get";
+//         return $this;
+//     }
+
+//     public function post()
+//     {
+//         echo "post";
+//         return $this;
+//     }
+
+//     public function where()
+//     {
+//         echo "where";
+//         return $this;
+//     }
+// }
+
+//  $test = new Test();
+
+//  $test->get()->where();

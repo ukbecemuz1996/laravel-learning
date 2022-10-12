@@ -14,5 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/users',
         '/tmp-request',
+        '/calculator',
+        '/users-view'
     ];
 }

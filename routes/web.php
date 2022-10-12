@@ -320,6 +320,44 @@ Route::post('/tmp-request', function (Request $request) {
     return "Tmp Post Request";
 });
 
+Route::get('/calculator', function (Request $request) {
+    $num1 = $request->query('num1');
+    $num2 = $request->query('num2');
+    $operation = $request->query('operation');
+
+    switch ($operation) {
+        case 'add':
+            return $num1 + $num2;
+        case 'sub':
+            return $num1 - $num2;
+        case 'mul':
+            return $num1 * $num2;
+        case 'div':
+            return $num1 / $num2;
+        default:
+            return "Operation Type Is Not Correct";
+    }
+});
+
+Route::post('/calculator', function (Request $request) {
+    $num1 = $request->input('num1');
+    $num2 = $request->input('num2');
+    $operation = $request->input('operation');
+
+    switch ($operation) {
+        case 'add':
+            return $num1 + $num2;
+        case 'sub':
+            return $num1 - $num2;
+        case 'mul':
+            return $num1 * $num2;
+        case 'div':
+            return $num1 / $num2;
+        default:
+            return "Operation Type Is Not Correct";
+    }
+});
+
 /**
  * ---------- Response ------------
  *  response()
@@ -336,6 +374,89 @@ Route::post('/tmp-request', function (Request $request) {
  *  redirect()->away()
  */
 
+Route::get('/response', function () {
+    $headers = [
+        'name' => 'okba',
+    ];
+
+    return response('Response', 400, $headers);
+});
+
+Route::get('/response2', function () {
+
+    return response('Response2', 200)
+        ->header('name', 'okba')
+        ->header('surename', 'cemuz');
+});
+
+Route::get('/response3', function () {
+
+    return response('Response3', 200)
+        ->withHeaders([
+            'name' => 'okba',
+            'surename' => 'cemuz',
+        ]);
+});
+
+Route::get('/response4', function (Request $request) {
+
+    echo $request->cookie('name');
+
+    return response('Response4', 200)
+        ->cookie('name', 'okba');
+});
+
+Route::get('/response5', function (Request $request) {
+
+    $c = cookie('surename', 'cemuz');
+
+    return response('Response5', 200)
+        ->cookie($c);
+});
+
+Route::get('/response6', function (Request $request) {
+
+    $c1 = cookie('num1', '5');
+
+    return response('Response6', 200)
+        ->withCookie($c1);
+});
+
+Route::get('/response7', function (Request $request) {
+
+    return redirect('/response');
+});
+
+Route::get('/response8', function (Request $request) {
+
+    return redirect()->route('manager.read.all');
+});
+
+Route::get('/response9', function (Request $request) {
+
+    return redirect()->route('manager.read', ['id' => 5]);
+});
+
+Route::get('/response10', function (Request $request) {
+
+    return redirect()->away('https://www.google.com');
+});
+
+Route::get('/response11', function (Request $request) {
+
+    return response()->download('test.txt');
+});
+
+Route::get('/response12', function (Request $request) {
+
+    return response()->file('villaroma-po.pdf', ['Content-Type' => 'application/pdf']); //mime
+});
+
+Route::get('/response13', function (Request $request) {
+
+    return response()->file('test.xml', ['Content-Type' => 'text/xml']); //mime
+});
+
 /**
  * ---------- Views ------------
  * views('path',[values])
@@ -344,6 +465,23 @@ Route::post('/tmp-request', function (Request $request) {
  * php artisan view:cache
  * php artisan view:clear
  */
+
+Route::get('/users-view', function () {
+    return view('users');
+});
+
+Route::post('/users-view', function () {
+    return view('users-post');
+});
+
+Route::get('/view-with-data', function (Request $request) {
+    $pageTitle = $request->query('pageTitle');
+    $arr = [
+        1, 2, 3, 4,
+    ];
+    return view('with-data', ['title' => $pageTitle, 'arr' => $arr]);
+});
+
 
 // class Test
 // {

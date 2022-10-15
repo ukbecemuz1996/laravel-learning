@@ -20,6 +20,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return view('pages.home');
+});
+
+Route::get('/projects', function () {
+    return view('pages.projects');
+});
+
 // Route::get
 
 // pass a function as argument (Anonymous Function)

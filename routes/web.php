@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+include_once "guest/index.php";
+
 Route::get('/', function () {
     return view('welcome');
 });

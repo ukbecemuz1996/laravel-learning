@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         '/users',
         '/tmp-request',
         '/calculator',
-        '/users-view'
+        '/users-view',
+        '/students/*'
     ];
 }
